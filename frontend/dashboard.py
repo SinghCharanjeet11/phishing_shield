@@ -59,7 +59,7 @@ def render_dashboard(
         evaluation_path: Path to evaluation report JSON file.
     """
     st.markdown("---")
-    st.header("📊 Model Performance & Evaluation Dashboard")
+    st.header("Model Performance & Evaluation Dashboard")
     st.caption("Standardized offline test evaluation metrics and candidate model tracking.")
 
     # 1. Load local evaluation metrics report
@@ -86,7 +86,7 @@ def render_dashboard(
         trained_at = api_info.get("trained_at", trained_at)
 
     # Section 1: Model Overview
-    st.subheader("📌 Selected Production Model Overview")
+    st.subheader("Selected Production Model Overview")
     col_ov1, col_ov2, col_ov3, col_ov4 = st.columns(4)
     with col_ov1:
         st.markdown(f"**Model Name**\n\n`{model_name}`")
@@ -99,10 +99,10 @@ def render_dashboard(
 
     # Section 2 & 3: Evaluation Metrics and Confusion Matrix
     if eval_data is None:
-        st.info("ℹ️ Evaluation results are not available yet. Please run the evaluation pipeline (`python -m src.evaluation.evaluate`).")
+        st.info("Evaluation results are not available yet. Please run the evaluation pipeline (`python -m src.evaluation.evaluate`).")
     else:
         metrics = eval_data.get("metrics", {})
-        st.subheader("🎯 Primary Evaluation Metrics (Held-out Test Split)")
+        st.subheader("Primary Evaluation Metrics (Held-out Test Split)")
 
         # Metric Cards
         col_m1, col_m2, col_m3, col_m4, col_m5, col_m6 = st.columns(6)
@@ -128,7 +128,7 @@ def render_dashboard(
         # Section 3: Confusion Matrix
         cm = eval_data.get("confusion_matrix", {})
         if cm:
-            st.subheader("🔲 Confusion Matrix Breakdown")
+            st.subheader("Confusion Matrix Breakdown")
             tn = cm.get("tn", 0)
             fp = cm.get("fp", 0)
             fn = cm.get("fn", 0)
@@ -150,9 +150,9 @@ def render_dashboard(
             )
 
     # Section 4: Candidate Model Comparison
-    st.subheader("⚖️ Candidate Model Comparison")
+    st.subheader("Candidate Model Comparison")
     if api_info is None:
-        st.warning("⚠️ Model comparison information is temporarily unavailable (API offline or unreachable).")
+        st.warning("Model comparison information is temporarily unavailable (API offline or unreachable).")
     else:
         candidates = api_info.get("candidates", [])
         if not candidates:
@@ -164,7 +164,7 @@ def render_dashboard(
             for cand in candidates:
                 cand_name = cand.get("model_name", "Unknown")
                 cand_metrics = cand.get("metrics", {})
-                is_selected = "✅ Yes" if cand_name == selected_name else "No"
+                is_selected = "Yes" if cand_name == selected_name else "No"
 
                 row = {
                     "Model": cand_name,
@@ -184,4 +184,4 @@ def render_dashboard(
 
     # Section 5: Metadata Footer
     if api_info or eval_data:
-        st.caption("ℹ️ Model selection rule: Phishing FPR ≤ 0.10, maximize F1-score, break ties on Recall.")
+        st.caption("Model selection rule: Phishing FPR at most 0.10, maximize F1-score, break ties on Recall.")

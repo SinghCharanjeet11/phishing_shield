@@ -91,7 +91,6 @@ flowchart TD
         StreamlitUI["Streamlit Frontend\nfrontend/app.py (Port 8501)"]
         DashComponent["frontend/dashboard.py\n(Performance Dashboard)"]
         Docker["Docker Compose Stack"]
-        EC2["AWS EC2 Deployment (t3.small)"]
 
         ModelArtifact --> API
         Feat --> API
@@ -101,7 +100,6 @@ flowchart TD
         DashComponent --> StreamlitUI
         API --> Docker
         StreamlitUI --> Docker
-        Docker --> EC2
     end
 ```
 
@@ -117,7 +115,6 @@ flowchart TD
 * **Frontend:** `streamlit`, `requests`
 * **Testing & Quality Assurance:** `pytest`, `httpx`
 * **DevOps & Containers:** `Docker`, `docker compose`, `GitHub Actions`
-* **Cloud Infrastructure:** `AWS EC2` (Ubuntu LTS, t3.small)
 
 ---
 
@@ -144,7 +141,7 @@ phishing_shield/
 ├── docs/
 │   ├── architecture.md             # Complete architectural specifications & Mermaid diagram
 │   ├── FEATURE_NOTES.md            # Dataset inspection & feature validation notes
-│   ├── DEMO_SCRIPT.md              # 8-step faculty demonstration sequence
+│   ├── DEMO_SCRIPT.md              # 7-step faculty demonstration sequence
 │   └── TEST_REPORT.md              # Empirical integration test report (6 scenarios)
 ├── frontend/
 │   ├── app.py                      # Main Streamlit detection interface (Deeksha)
@@ -289,6 +286,10 @@ pytest tests/ -v
 | **Streamlit Frontend** | `streamlit run frontend/app.py` | Launches interactive user interface on port 8501. |
 | **Test Suite** | `pytest tests/ -v` | Executes complete automated test suite. |
 
+**MLflow runs** (finished Logistic Regression and Random Forest runs across two training sessions):
+
+![MLflow runs](docs/screenshots/mlflow_runs.png)
+
 ---
 
 ## 9. Docker Deployment
@@ -310,18 +311,28 @@ docker compose down
 ```
 
 * **API Service:** Exposes port `8000`, mounts `./artifacts:/app/artifacts`, with healthcheck on `/health`.
-* **Frontend Service:** Exposes port `8501`, connects to backend via internal Docker network (`API_URL=http://api:8000`).
+* **Frontend Service:** Exposes port `8501`, connects to backend via internal Docker network (`API_URL=http://api:8000`), and mounts `./artifacts` read-only so the dashboard can read `evaluation.json`.
+
+**Home screen:**
+
+![PhishingShield home screen](docs/screenshots/app_home.png)
+
+**Prediction for a phishing URL:**
+
+![Prediction result](docs/screenshots/app_prediction.png)
 
 ---
 
 ## 10. Streamlit Model Performance Dashboard
 
 Implemented in `frontend/dashboard.py` via `render_dashboard(api_url, evaluation_path)`, the dashboard renders directly below the URL analyzer in Streamlit:
-1. **Model Overview:** Displays production model name (`RandomForest`), version (`v1`), MLflow run ID, and evaluation timestamp.
+1. **Model Overview:** Displays production model name (`RandomForest`), version (`v2`), MLflow run ID, and evaluation timestamp.
 2. **Metric Cards:** Real-time visualization of Accuracy (99.95%), Precision (99.94%), Recall (99.98%), F1-Score (99.96%), ROC-AUC (0.9999), and FPR (0.11%).
 3. **Confusion Matrix Breakdown:** Interactive matrix showing exact TN, FP, FN, and TP counts.
 4. **Candidate Model Comparison Table:** Fetches candidate metrics directly from `GET /model-info` to benchmark Logistic Regression vs Random Forest.
 5. **Architectural Safety:** Zero local model inference in UI; graceful fallback messages if API or evaluation reports are missing.
+
+![Model performance dashboard](docs/screenshots/app_dashboard.png)
 
 ---
 
@@ -333,6 +344,8 @@ Drift monitoring (`src/monitoring/drift.py`) detects feature distribution shifts
 * **Shift Characteristics:** Artificially altered to 80% phishing (vs 63% baseline) with a sampling bias towards longer URLs and query-heavy paths.
 * **Output:** `artifacts/reports/drift_report.html` and `artifacts/reports/drift_summary.json`.
 * **Important Notice:** This batch is **simulated** for monitoring demonstration in CI and academic review; it is not live production traffic.
+
+![Evidently drift report](docs/screenshots/drift_report.png)
 
 ---
 
@@ -371,11 +384,11 @@ pytest tests/ -v
 | Name | Role | Core Contributions |
 |---|---|---|
 | **Arman** | **Data & ML Engineer** | Dataset inspection and preparation, 16 URL lexical features extractor (`extractor.py`), evaluation module (`evaluate.py`), simulated drift batch (`prepare.py`), Streamlit performance dashboard (`dashboard.py`), test suite, architecture documentation, integration testing, and demo walkthrough. |
-| **Charan** | **MLOps & CI Engineer** | Multi-candidate model training pipeline (`train.py`), model serialization and versioning (`model_io.py`), MLflow experiment tracking, Evidently data drift report (`drift.py`), GitHub Actions CI workflow (`ci.yml`), and AWS cloud environment setup. |
-| **Deeksha** | **Backend & Deployment Engineer** | FastAPI REST prediction backend (`main.py`, `schemas.py`), main Streamlit application (`app.py`), Dockerfile and Docker Compose orchestration, and AWS EC2 deployment. |
+| **Charan** | **MLOps & CI Engineer** | Multi-candidate model training pipeline (`train.py`), model serialization and versioning (`model_io.py`), MLflow experiment tracking, Evidently data drift report (`drift.py`), and GitHub Actions CI workflow (`ci.yml`). |
+| **Deeksha** | **Backend & Deployment Engineer** | FastAPI REST prediction backend (`main.py`, `schemas.py`), main Streamlit application (`app.py`), and Dockerfile and Docker Compose orchestration. |
 
 ---
 
 ## 15. License
 
-This project is licensed under the MIT License — see the LICENSE file for details.
+This project is licensed under the MIT License. See the LICENSE file for details.
