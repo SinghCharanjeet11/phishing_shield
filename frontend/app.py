@@ -275,18 +275,9 @@ def valid_url(url):
 
 st.markdown("""
 <div class="hero">
-
-    <div class="eyebrow">
-        ● &nbsp; INTELLIGENT THREAT DETECTION
-    </div>
-
-    <h1>Secure your digital world.</h1>
-
-    <p>
-        Analyze suspicious URLs, identify phishing threats
-        and make safer decisions before visiting a website.
-    </p>
-
+<div class="eyebrow">● &nbsp; INTELLIGENT THREAT DETECTION</div>
+<h1>Secure your digital world.</h1>
+<p>Analyze suspicious URLs, identify phishing threats and make safer decisions before visiting a website.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -344,15 +335,8 @@ with col3:
 
 st.markdown("""
 <div class="scanner">
-
-    <div class="scanner-title">
-        🔎 URL Security Scanner
-    </div>
-
-    <div class="scanner-subtitle">
-        Enter a website address below to analyze its security risk.
-    </div>
-
+<div class="scanner-title">🔎 URL Security Scanner</div>
+<div class="scanner-subtitle">Enter a website address below to analyze its security risk.</div>
 </div>
 """, unsafe_allow_html=True)
 

@@ -1,6 +1,13 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from src.api.main import app
+
+
+@pytest.fixture(autouse=True)
+def empty_model_dir(tmp_path, monkeypatch):
+    """Point MODEL_DIR at an empty folder so a locally trained model never leaks in."""
+    monkeypatch.setenv("MODEL_DIR", str(tmp_path))
 
 
 def test_home():
