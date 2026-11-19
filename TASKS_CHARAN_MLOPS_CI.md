@@ -3,12 +3,12 @@
 **Branch:** `feature/mlops-ci`
 **Merges to `main` via PR only. Ask one teammate to review each PR.**
 
-**Workload: ~15.5 h (~34% of the team)**
+**Workload: ~13.5 h (~33% of the team)**
 
 ## Your mission
 Own the reproducible training pipeline: train and compare models, track everything in MLflow, save a **versioned** model with metadata, generate the drift report, and make **GitHub Actions** run our tests on every push/PR. You also set up the repo skeleton so everyone starts from the same structure.
 
-(Originally the overview had a separate DevOps member. With 3 people, **CI** and the **AWS account/instance setup** move to you; **Docker and deploying the app on EC2** move to Deeksha.)
+(Originally the overview had a separate DevOps member. With 3 people, **CI** moves to you and **Docker** moves to Deeksha. The optional AWS EC2 deployment is **not part of this project**; the app is demoed locally with Docker compose.)
 
 ---
 
@@ -23,7 +23,6 @@ Own the reproducible training pipeline: train and compare models, track everythi
 | `src/monitoring/drift.py` | Evidently drift report from a **separate / shifted** batch |
 | `tests/test_model.py` | Tiny synthetic-data training test: save, load, metadata, predict_proba |
 | `.github/workflows/ci.yml` | Install, run pytest, then Docker build (Docker build step after Deeksha's Dockerfile exists) |
-| AWS setup (no files in git) | EC2 instance, security group, budget alert, SSH access for Deeksha |
 
 ---
 
@@ -105,14 +104,7 @@ Own the reproducible training pipeline: train and compare models, track everythi
 
 ### T2.8 Verification (Day 2, 11:00-13:00)
 - [ ] Fresh clone → install → `prepare` → `train` → `evaluate` → `drift` works end to end with no manual steps.
-- [ ] MLflow UI shows both runs with params, metrics and artifacts: `mlflow ui --host 127.0.0.1 --port 5000` (**local only, never exposed on EC2**).
-
-### T2.9 AWS account and instance setup (Day 1, 16:00-18:00 or Day 2, 11:00-13:00), OPTIONAL
-- [ ] Set an AWS **budget alert** first (e.g. $5).
-- [ ] Launch Ubuntu LTS, **t3.small**, 15-20 GB disk; create the key pair and share it privately with Deeksha (**never commit `.pem` files or AWS keys**).
-- [ ] Security group: **22 only from our IP**, **8501 public**, **8000 NOT public**, **MLflow (5000) never open**.
-- [ ] Hand over to Deeksha by Day 2, 13:00: public IP, SSH command, confirmation that the ports are set as above.
-- [ ] After the demo: **stop the instance** (or terminate it once the team agrees).
+- [ ] MLflow UI shows both runs with params, metrics and artifacts: `mlflow ui --host 127.0.0.1 --port 5000` (**local only, never exposed publicly**).
 
 ---
 
@@ -124,7 +116,6 @@ Own the reproducible training pipeline: train and compare models, track everythi
 | `load_model(model_dir)` helper and the `MODEL_DIR` env var | Deeksha (API, test fixtures) |
 | `drift_report.html` / `drift_summary.json` | Deeksha (optional link in UI), Arman (README) |
 | CI workflow | Everyone |
-| Running EC2 instance + SSH access | Deeksha (deployment) |
 
 ## Interfaces you consume
 - `FEATURES`, `extract_batch`, `load_dataset`, `make_splits`, `compute_metrics`, processed CSVs and `current_batch.csv` from **Arman** (`TASKS_ARMAN_DATA_ML.md`).
@@ -137,7 +128,6 @@ Own the reproducible training pipeline: train and compare models, track everythi
 - [ ] CI is green on `main` and runs the Docker build after tests
 - [ ] `drift_report.html` generated from a separate batch
 - [ ] No `mlruns/`, `mlflow.db` or model binaries committed
-- [ ] (Optional) EC2 instance ready for Deeksha with the correct security group and a budget alert
 
 ## Your demo moments
 Step 1 (train both models), step 2 (MLflow runs), step 4 (versioned model + metadata), step 6 (push → GitHub Actions), step 7 (drift report).
