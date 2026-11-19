@@ -3,12 +3,12 @@
 **Branch:** `feature/app-deploy`
 **Merges to `main` via PR only. Ask one teammate to review each PR.**
 
-**Workload: ~13 h (~28% of the team, the lightest share)**
+**Workload: ~10 h (~25% of the team, the lightest share)**
 
 ## Your mission
-Turn the trained model into something people can use: the **FastAPI** prediction service, the main **Streamlit** screen, the **Docker / docker compose** setup, and deploying the app on **AWS EC2** (optional).
+Turn the trained model into something people can use: the **FastAPI** prediction service, the main **Streamlit** screen, and the **Docker / docker compose** setup that runs the app locally for the demo.
 
-(Originally the overview had a separate DevOps member. With 3 people, **Docker + deploying on EC2** move to you. **CI and the AWS account/instance setup** go to Charan. The **model performance dashboard** and **testing of the deployed app** go to Arman.)
+(Originally the overview had a separate DevOps member. With 3 people, **Docker** moves to you and **CI** goes to Charan. The **model performance dashboard** and **testing of the running app** go to Arman. The optional AWS EC2 deployment is **not part of this project**.)
 
 **Rule from the overview:** do not build the Streamlit UI before the model can make predictions through the API (Milestone 1). Until then, focus on the API skeleton and Docker.
 
@@ -25,7 +25,6 @@ Turn the trained model into something people can use: the **FastAPI** prediction
 | `Dockerfile` | `python:3.11-slim` image for API + frontend |
 | `docker-compose.yml` | `api` + `frontend` services |
 | `.env.example` | `API_URL`, `MODEL_DIR`, `MLFLOW_TRACKING_URI` (no secrets) |
-| `docs/DEPLOYMENT.md` | EC2 steps actually used, security group, how the model gets onto the box |
 
 ---
 
@@ -86,15 +85,7 @@ Turn the trained model into something people can use: the **FastAPI** prediction
 - [ ] Friendly errors: API down, 503 (no model), 422 (bad URL). The UI must never show a raw traceback.
 - [ ] Visible disclaimer: "Lexical/structural heuristics, not a definitive security verdict."
 - [ ] Function over polish. No time on styling.
-
-### T3.5 AWS EC2 deployment (Day 2, 13:00-16:00), OPTIONAL, LAST
-- [ ] **Decide on Day 1** how the model reaches EC2 (it is gitignored). Proposal: `scp -r artifacts/model` from the laptop that trained it. Alternative: retrain on the instance.
-- [ ] **Charan hands you** a running instance (Ubuntu LTS, t3.small, security group already set: 22 from our IP, 8501 public, 8000 closed) and SSH access by Day 2, 13:00.
-- [ ] Install Docker + compose, clone, copy model, `sudo docker compose up --build -d`.
-- [ ] Check from a browser that `http://<public-ip>:8501` works and that `:8000` is **not** reachable from outside.
-- [ ] Tell Arman when it is live so they can run the integration tests (Arman's T1.9). Fix the bugs they report.
-- [ ] Never commit AWS keys or `.pem` files.
-- [ ] Write the actual steps in `docs/DEPLOYMENT.md`.
+- [ ] Tell Arman when `docker compose up` works so they can run the integration tests (Arman's T1.9). Fix the bugs they report.
 
 ---
 
@@ -111,7 +102,6 @@ Turn the trained model into something people can use: the **FastAPI** prediction
 - `extract_features`, `FEATURES` from **Arman** (`TASKS_ARMAN_DATA_ML.md`)
 - `render_dashboard(...)` in `frontend/dashboard.py` from **Arman**
 - `load_model()`, `save_model()`, `MODEL_DIR`, `model_metadata.json` schema from **Charan** (`TASKS_CHARAN_MLOPS_CI.md`)
-- EC2 instance + SSH access from **Charan**
 
 ## Definition of done (Deeksha)
 - [ ] All 4 endpoints work with the real model; `/docs` shows them
@@ -119,7 +109,6 @@ Turn the trained model into something people can use: the **FastAPI** prediction
 - [ ] `pytest tests/test_api.py -v` passes locally and in CI
 - [ ] `docker compose up --build` serves the UI with real predictions
 - [ ] Streamlit shows prediction, probability, risk and features, with Arman's dashboard embedded
-- [ ] (Optional) App live on EC2 with port 8000 closed
 
 ## Your demo moments
-Step 5 (run the app with Docker), step 8 (deployed app on AWS), and the live URL predictions.
+Step 5 (run the app with Docker) and the live URL predictions.

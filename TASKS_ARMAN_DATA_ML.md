@@ -3,10 +3,10 @@
 **Branch:** `feature/data-ml`
 **Merges to `main` via PR only. Ask one teammate to review each PR.**
 
-**Workload: ~17.5 h (~38% of the team, the largest share)**
+**Workload: ~17 h (~42% of the team, the largest share)**
 
 ## Your mission
-Own everything from the raw CSV to "a URL becomes 16 numbers". You build the **one feature extractor that the whole project depends on**, so it ships first. Later you own evaluation, the drift batch, the model performance dashboard in the UI, testing of the deployed app, the README and the demo script.
+Own everything from the raw CSV to "a URL becomes 16 numbers". You build the **one feature extractor that the whole project depends on**, so it ships first. Later you own evaluation, the drift batch, the model performance dashboard in the UI, testing of the running app, the README and the demo script.
 
 You are on the critical path for the first 2 hours: Charan (training) and Deeksha (API) are both waiting on `extractor.py`.
 
@@ -95,9 +95,9 @@ You are on the critical path for the first 2 hours: Charan (training) and Deeksh
 
 ### T1.7 README, diagram, demo script (Day 2, 13:00-18:00)
 - [ ] `README.md`: what it is, architecture diagram, setup (Windows and Linux), how to train / evaluate / drift / run API / run UI / run tests / docker compose, model comparison table with real numbers, limitations ("lexical heuristics, not a definitive security verdict").
-- [ ] Architecture diagram: dataset → prepare → extractor → train (MLflow) → model artifact → FastAPI → Streamlit, plus Docker / CI / EC2 / drift.
+- [ ] Architecture diagram: dataset → prepare → extractor → train (MLflow) → model artifact → FastAPI → Streamlit, plus Docker / CI / drift.
 - [ ] Demo script: who says what, in the order of the 8-step demo in `PROJECT_OVERVIEW.md` §14.
-- [ ] Collect screenshots from teammates (MLflow, UI, CI, drift, EC2).
+- [ ] Collect screenshots from teammates (MLflow, UI, CI, drift).
 
 ### T1.8 Streamlit model performance dashboard (Day 2, 09:00-11:00)
 - [ ] `frontend/dashboard.py` exposes `render_dashboard(api_url: str, evaluation_path: str = "artifacts/reports/evaluation.json")`. Deeksha's `app.py` calls it; keeping it in its own file avoids merge conflicts on `app.py`.
@@ -105,8 +105,8 @@ You are on the critical path for the first 2 hours: Charan (training) and Deeksh
 - [ ] If `evaluation.json` is missing or the API is down: show a friendly message, never a traceback.
 - [ ] Only HTTP calls to the API plus reading `evaluation.json`. Do not load the model or compute features in the UI.
 
-### T1.9 Integration testing of the deployed app (Day 2, 15:00-16:00)
-- [ ] Against the Docker app locally and then on EC2: a known phishing URL, a known legitimate URL, an empty input, an IP-address URL, a 3,000-character URL, an API restart.
+### T1.9 Integration testing of the running app (Day 2, 15:00-16:00)
+- [ ] Against the app running locally with `docker compose up`: a known phishing URL, a known legitimate URL, an empty input, an IP-address URL, a 3,000-character URL, an API restart.
 - [ ] Record results (pass/fail + screenshot) in `docs/TEST_REPORT.md` and report bugs to their owner immediately.
 
 ---
@@ -136,7 +136,7 @@ You are on the critical path for the first 2 hours: Charan (training) and Deeksh
 - [ ] `evaluation.json` generated for the selected model
 - [ ] `current_batch.csv` generated and its shift documented
 - [ ] Dashboard renders in the Streamlit app (locally and in Docker) with real metrics
-- [ ] `TEST_REPORT.md` filled in for local Docker and EC2
+- [ ] `TEST_REPORT.md` filled in for the local Docker app
 - [ ] `FEATURE_NOTES.md` and `README.md` complete, with real numbers
 - [ ] No dataset or processed files committed
 
