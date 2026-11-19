@@ -12,7 +12,6 @@ API_URL = os.getenv("API_URL", "http://127.0.0.1:8000")
 
 st.set_page_config(
     page_title="PhishingShield | URL Security",
-    page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -24,10 +23,17 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Raleway:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap');
 
-html, body, [class*="css"] {
-    font-family: 'Inter', sans-serif;
+/* Body text: Open Sans (icon fonts and code blocks keep their own fonts) */
+.stApp, .stApp *:not([data-testid="stIconMaterial"]):not([class*="material"]):not(code):not(pre) {
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Headings and display values: Raleway */
+.stApp h1, .stApp h1 *, .stApp h2, .stApp h2 *, .stApp h3, .stApp h3 *,
+.stApp h4, .stApp h4 *, .scanner-title, .status-value, .result-value {
+    font-family: 'Raleway', sans-serif !important;
 }
 
 .stApp {
@@ -51,27 +57,27 @@ html, body, [class*="css"] {
 
 /* Hero */
 .hero {
-    background: linear-gradient(120deg, #102e35, #14243e);
-    border: 1px solid #28515b;
-    border-radius: 22px;
-    padding: 48px;
+    padding: 24px 0 8px 0;
     margin-bottom: 28px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
 }
 
-.eyebrow {
-    color: #4adeba;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 4px;
-    text-transform: uppercase;
+/* Hero heading: Space Grotesk */
+.stApp .hero h1, .stApp .hero h1 * {
+    font-family: 'Space Grotesk', sans-serif !important;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+/* Hide the link icon Streamlit adds next to headings */
+[data-testid="stHeaderActionElements"], .stApp h1 a, .stApp h2 a, .stApp h3 a {
+    display: none !important;
 }
 
 .hero h1 {
     color: #ffffff;
     font-size: clamp(34px, 5vw, 58px);
     font-weight: 800;
-    margin: 22px 0 12px 0;
+    margin: 0 0 12px 0;
     line-height: 1.15;
 }
 
@@ -87,15 +93,12 @@ html, body, [class*="css"] {
     border: 1px solid #2a405a;
     border-radius: 16px;
     padding: 23px;
-    min-height: 120px;
 }
 
 .status-label {
     color: #91a9c3;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .status-value {
@@ -103,12 +106,6 @@ html, body, [class*="css"] {
     font-size: 23px;
     font-weight: 800;
     margin-top: 17px;
-}
-
-.status-sub {
-    color: #8da4bd;
-    font-size: 12px;
-    margin-top: 5px;
 }
 
 /* Scanner */
@@ -148,7 +145,11 @@ html, body, [class*="css"] {
 }
 
 /* Buttons */
-.stButton button {
+.stTextInput input::placeholder {
+    color: #6f86a0 !important;
+}
+
+.stButton button, .stFormSubmitButton button {
     background: linear-gradient(90deg, #06b6d4, #2563eb) !important;
     color: white !important;
     border: none !important;
@@ -158,7 +159,11 @@ html, body, [class*="css"] {
     transition: all 0.25s ease;
 }
 
-.stButton button:hover {
+.stButton button p, .stFormSubmitButton button p {
+    color: white !important;
+}
+
+.stButton button:hover, .stFormSubmitButton button:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(6,182,212,0.3);
 }
@@ -173,10 +178,9 @@ html, body, [class*="css"] {
 }
 
 .result-heading {
-    font-size: 13px;
+    font-size: 14px;
     color: #91a9c3;
-    font-weight: 800;
-    letter-spacing: 2px;
+    font-weight: 600;
 }
 
 .result-value {
@@ -210,6 +214,27 @@ html, body, [class*="css"] {
 
 div[data-testid="stAlert"] {
     border-radius: 12px;
+}
+
+/* Readable text on the dark background */
+[data-testid="stHeader"] {
+    background: transparent;
+}
+
+[data-testid="stWidgetLabel"] p {
+    color: #c9d8e8 !important;
+}
+
+[data-testid="stMetricLabel"], [data-testid="stMetricLabel"] * {
+    color: #91a9c3 !important;
+}
+
+[data-testid="stMetricValue"], [data-testid="stMetricValue"] * {
+    color: #ffffff !important;
+}
+
+[data-testid="stTable"] th, [data-testid="stTable"] td {
+    color: #dbe7f3 !important;
 }
 
 </style>
@@ -275,8 +300,7 @@ def valid_url(url):
 
 st.markdown("""
 <div class="hero">
-<div class="eyebrow">● &nbsp; INTELLIGENT THREAT DETECTION</div>
-<h1>Secure your digital world.</h1>
+<h1>Secure your digital world</h1>
 <p>Analyze suspicious URLs, identify phishing threats and make safer decisions before visiting a website.</p>
 </div>
 """, unsafe_allow_html=True)
@@ -300,31 +324,24 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown(f"""
     <div class="status-card">
-        <div class="status-label">PLATFORM STATUS</div>
-        <div class="status-value">
-            {"🟢 ONLINE" if api_connected else "🔴 OFFLINE"}
-        </div>
-        <div class="status-sub">FastAPI connection</div>
+        <div class="status-label">API</div>
+        <div class="status-value">{"Online" if api_connected else "Offline"}</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col2:
     st.markdown(f"""
     <div class="status-card">
-        <div class="status-label">ML ENGINE</div>
-        <div class="status-value">
-            {"🟢 READY" if model_loaded else "🟡 NOT READY"}
-        </div>
-        <div class="status-sub">Model availability</div>
+        <div class="status-label">Model</div>
+        <div class="status-value">{"Loaded" if model_loaded else "Not loaded"}</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col3:
     st.markdown(f"""
     <div class="status-card">
-        <div class="status-label">MODEL VERSION</div>
+        <div class="status-label">Model version</div>
         <div class="status-value">{model_version}</div>
-        <div class="status-sub">Current deployed model</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -335,7 +352,7 @@ with col3:
 
 st.markdown("""
 <div class="scanner">
-<div class="scanner-title">🔎 URL Security Scanner</div>
+<div class="scanner-title">URL Security Scanner</div>
 <div class="scanner-subtitle">Enter a website address below to analyze its security risk.</div>
 </div>
 """, unsafe_allow_html=True)
@@ -349,7 +366,7 @@ with st.form("url_scanner", clear_on_submit=False):
     )
 
     submitted = st.form_submit_button(
-        "⚡ ANALYZE WEBSITE",
+        "ANALYZE WEBSITE",
         use_container_width=True
     )
 
@@ -373,7 +390,7 @@ if submitted:
         )
 
     else:
-        with st.spinner("🔍 Analyzing website security..."):
+        with st.spinner("Analyzing website security..."):
 
             result, error = analyze_url(url)
 
@@ -402,23 +419,23 @@ if submitted:
 
             st.markdown("---")
 
-            st.markdown("## 🛡️ Security Analysis Report")
+            st.markdown("## Security Analysis Report")
 
             st.caption(f"Scanned URL: {url}")
 
             if is_phishing:
-                st.error("🚨 PHISHING DETECTED")
+                st.error("PHISHING DETECTED")
             elif prediction == "LEGITIMATE":
-                st.success("✅ WEBSITE CLASSIFIED AS LEGITIMATE")
+                st.success("WEBSITE CLASSIFIED AS LEGITIMATE")
             else:
-                st.warning("⚠️ UNKNOWN PREDICTION")
+                st.warning("UNKNOWN PREDICTION")
 
             col1, col2, col3 = st.columns(3)
 
             with col1:
                 st.markdown(f"""
                 <div class="result-card">
-                    <div class="result-heading">PREDICTION</div>
+                    <div class="result-heading">Prediction</div>
                     <div class="result-value">
                         {prediction}
                     </div>
@@ -428,7 +445,7 @@ if submitted:
             with col2:
                 st.markdown(f"""
                 <div class="result-card">
-                    <div class="result-heading">RISK LEVEL</div>
+                    <div class="result-heading">Risk level</div>
                     <div class="result-value">
                         {risk}
                     </div>
@@ -438,21 +455,21 @@ if submitted:
             with col3:
                 st.markdown(f"""
                 <div class="result-card">
-                    <div class="result-heading">PHISHING PROBABILITY</div>
+                    <div class="result-heading">Phishing probability</div>
                     <div class="result-value">
                         {probability_percent}%
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
 
-            st.markdown("### 📊 Phishing Probability")
+            st.markdown("### Phishing Probability")
 
             st.progress(
                 min(max(probability, 0.0), 1.0),
                 text=f"{probability_percent}% phishing probability"
             )
 
-            st.markdown("### 🔬 Extracted Features")
+            st.markdown("### Extracted Features")
 
             if features:
                 st.dataframe(
@@ -475,13 +492,13 @@ if submitted:
 
 st.markdown("---")
 
-st.markdown("## 🔐 Why PhishingShield?")
+st.markdown("## Why PhishingShield?")
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown("""
-    ### 🎯 Smart Detection
+    ### Smart Detection
 
     Machine-learning-based URL classification
     designed to identify suspicious websites.
@@ -489,7 +506,7 @@ with col1:
 
 with col2:
     st.markdown("""
-    ### ⚡ Fast Analysis
+    ### Fast Analysis
 
     FastAPI-powered prediction interface
     for quick URL security checks.
@@ -497,7 +514,7 @@ with col2:
 
 with col3:
     st.markdown("""
-    ### 📈 Model Monitoring
+    ### Model Monitoring
 
     Version-aware model integration and
     monitoring support.
@@ -514,11 +531,11 @@ render_dashboard(API_URL)
 
 st.markdown("""
 <div class="footer">
-    🛡️ <b>PhishingShield</b> &nbsp; | &nbsp;
+    <b>PhishingShield</b> &nbsp; | &nbsp;
     Intelligent Phishing URL Detection System
     <br><br>
-    Built with Python · Streamlit · FastAPI · Machine Learning
+    Built with Python, Streamlit, FastAPI and Machine Learning
     <br><br>
-    ⚠️ Lexical/structural heuristics, not a definitive security verdict.
+    Lexical/structural heuristics, not a definitive security verdict.
 </div>
 """, unsafe_allow_html=True)
