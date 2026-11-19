@@ -1,0 +1,32 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secrets
+.env
+*.pem
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Data (each teammate downloads the dataset separately)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Model and reports (generated, never committed)
+artifacts/model/*
+!artifacts/model/.gitkeep
+artifacts/reports/*
+!artifacts/reports/.gitkeep
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
