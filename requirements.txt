@@ -1,0 +1,35 @@
+# PhishingShield - Python 3.11
+# Unpinned on purpose for the first install. After the first successful install on
+# one machine, run `pip freeze > requirements.lock.txt` (or pin versions here) so all
+# three laptops, Docker and CI use identical versions.
+
+# --- Data / ML ---
+pandas
+numpy
+scikit-learn
+joblib
+tldextract
+
+# --- Optional ML (keep only if time permits; remove if it slows installs) ---
+xgboost
+
+# --- Experiment tracking ---
+mlflow
+
+# --- Monitoring ---
+# Pin this before writing drift.py: Evidently's API changed heavily between 0.4.x and 0.7.x.
+evidently
+
+# --- API ---
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+
+# --- Frontend ---
+streamlit
+requests
+
+# --- Testing ---
+pytest
+httpx
