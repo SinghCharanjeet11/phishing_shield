@@ -91,7 +91,6 @@ flowchart TD
         StreamlitUI["Streamlit Frontend\nfrontend/app.py (Port 8501)"]
         DashComponent["frontend/dashboard.py\n(Performance Dashboard)"]
         Docker["Docker Compose Stack"]
-        EC2["AWS EC2 Deployment (t3.small)"]
 
         ModelArtifact --> API
         Feat --> API
@@ -101,7 +100,6 @@ flowchart TD
         DashComponent --> StreamlitUI
         API --> Docker
         StreamlitUI --> Docker
-        Docker --> EC2
     end
 ```
 
@@ -117,7 +115,6 @@ flowchart TD
 * **Frontend:** `streamlit`, `requests`
 * **Testing & Quality Assurance:** `pytest`, `httpx`
 * **DevOps & Containers:** `Docker`, `docker compose`, `GitHub Actions`
-* **Cloud Infrastructure:** `AWS EC2` (Ubuntu LTS, t3.small)
 
 ---
 
@@ -144,7 +141,7 @@ phishing_shield/
 ├── docs/
 │   ├── architecture.md             # Complete architectural specifications & Mermaid diagram
 │   ├── FEATURE_NOTES.md            # Dataset inspection & feature validation notes
-│   ├── DEMO_SCRIPT.md              # 8-step faculty demonstration sequence
+│   ├── DEMO_SCRIPT.md              # 7-step faculty demonstration sequence
 │   └── TEST_REPORT.md              # Empirical integration test report (6 scenarios)
 ├── frontend/
 │   ├── app.py                      # Main Streamlit detection interface (Deeksha)
@@ -371,8 +368,8 @@ pytest tests/ -v
 | Name | Role | Core Contributions |
 |---|---|---|
 | **Arman** | **Data & ML Engineer** | Dataset inspection and preparation, 16 URL lexical features extractor (`extractor.py`), evaluation module (`evaluate.py`), simulated drift batch (`prepare.py`), Streamlit performance dashboard (`dashboard.py`), test suite, architecture documentation, integration testing, and demo walkthrough. |
-| **Charan** | **MLOps & CI Engineer** | Multi-candidate model training pipeline (`train.py`), model serialization and versioning (`model_io.py`), MLflow experiment tracking, Evidently data drift report (`drift.py`), GitHub Actions CI workflow (`ci.yml`), and AWS cloud environment setup. |
-| **Deeksha** | **Backend & Deployment Engineer** | FastAPI REST prediction backend (`main.py`, `schemas.py`), main Streamlit application (`app.py`), Dockerfile and Docker Compose orchestration, and AWS EC2 deployment. |
+| **Charan** | **MLOps & CI Engineer** | Multi-candidate model training pipeline (`train.py`), model serialization and versioning (`model_io.py`), MLflow experiment tracking, Evidently data drift report (`drift.py`), and GitHub Actions CI workflow (`ci.yml`). |
+| **Deeksha** | **Backend & Deployment Engineer** | FastAPI REST prediction backend (`main.py`, `schemas.py`), main Streamlit application (`app.py`), and Dockerfile and Docker Compose orchestration. |
 
 ---
 

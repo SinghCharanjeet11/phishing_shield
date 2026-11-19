@@ -9,7 +9,7 @@
 
 ## 1. Executive Summary
 
-This report documents empirical integration tests evaluating the PhishingShield system across six mandatory operational scenarios. In compliance with project guidelines, all test results reflect actual observed behavior. Local container and Python execution were verified directly; AWS EC2 cloud testing is marked as **NOT RUN / BLOCKED** pending cloud infrastructure provisioning by Charan/Deeksha.
+This report documents empirical integration tests evaluating the PhishingShield system across six mandatory operational scenarios. In compliance with project guidelines, all test results reflect actual observed behavior. Local container and Python execution were verified directly. The app is demonstrated locally with Docker compose; there is no cloud deployment.
 
 ---
 
@@ -23,7 +23,6 @@ This report documents empirical integration tests evaluating the PhishingShield 
 | Local App | **Scenario 4:** IP-Address URL | `http://192.168.0.1/login` | Extract `has_ip_address = 1`; flag phishing risk | `has_ip_address: 1`, Prediction: **PHISHING**, Probability: `1.0000`, Risk: **HIGH** | **PASS** | Direct IP hostname triggers maximum phishing probability. |
 | Local App | **Scenario 5:** Over-long URL | 3,000-character URL string (`https://example.com/path?x=...`) | Compute features without memory leak or buffer crash | URL parsed cleanly; length = 3,025; execution completes in < 5ms. | **PASS** | Regex and tldextract handle large strings safely without CPU lock or overflow. |
 | Local App | **Scenario 6:** API Restart / Missing Model | Model artifact removed or service restarted | 503 response on `/predict`; dashboard renders notice without traceback | `/health` returns `model_loaded: false`; `/predict` returns 503; Dashboard displays friendly warning. | **PASS** | Graceful degradation verified; no Python traceback exposed to end users. |
-| AWS EC2 | All Scenarios | Live EC2 deployment (`http://<EC2-IP>:8501`) | Full cloud deployment evaluation | Cloud instance and `.pem` credentials not provisioned yet. | **BLOCKED / NOT RUN** | Awaiting infrastructure handover from Charan (T2.9) and Deeksha (T3.5). |
 
 ---
 

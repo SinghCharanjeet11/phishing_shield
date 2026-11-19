@@ -1,17 +1,17 @@
 # PhishingShield: Faculty Demonstration Script
 
-This document details the exact 8-step live demonstration sequence for PhishingShield, aligned with Section 14 of `PROJECT_OVERVIEW.md`. It outlines speaker roles, screen views, execution commands, expected outputs, and seamless presenter transitions.
+This document details the exact 7-step live demonstration sequence for PhishingShield, aligned with Section 14 of `PROJECT_OVERVIEW.md`. It outlines speaker roles, screen views, execution commands, expected outputs, and seamless presenter transitions.
 
 ---
 
 ## Team Roster & Speaking Roles
 * **Arman (Data & ML Engineer):** Project Introduction, Architecture & Pipeline Walkthrough, Step 3 (Evaluation Metrics Comparison on Dashboard), Limitations, Conclusion.
 * **Charan (MLOps & CI Engineer):** Step 1 (Model Training), Step 2 (MLflow Experiment Tracking), Step 4 (Model Versioning & Artifacts), Step 6 (GitHub Actions CI), Step 7 (Evidently Drift Detection).
-* **Deeksha (Backend, Frontend & Deployment Engineer):** Step 5 (Docker Compose Startup & Live URL Inference), Step 8 (AWS EC2 Cloud Deployment Walkthrough).
+* **Deeksha (Backend, Frontend & Deployment Engineer):** Step 5 (Docker Compose Startup & Live URL Inference).
 
 ---
 
-## 8-Step Live Demonstration Sequence
+## 7-Step Live Demonstration Sequence
 
 ### Step 0: Welcome & Architecture Overview
 * **Speaker:** **Arman**
@@ -123,17 +123,6 @@ This document details the exact 8-step live demonstration sequence for PhishingS
   * Evidently HTML report displays comparison between Reference (`data/processed/train.csv`) and Current (`data/processed/current_batch.csv`, built by Arman from held-out test data with 80% phishing and length bias).
   * Report highlights drifted features (e.g., `url_length`, `query_param_count`, `dot_count`) and flags overall dataset drift.
   * Note acknowledged: *"Simulated drift batch for pipeline demonstration; not production traffic."*
-* **Transition to Deeksha:** *"Deeksha will now showcase the live deployment running on AWS EC2."*
-
----
-
-### Step 8: Show Deployed App on AWS EC2
-* **Speaker:** **Deeksha**
-* **Screen:** Browser navigating to `http://<EC2-PUBLIC-IP>:8501`.
-* **Action:**
-  1. Show Streamlit frontend running on Ubuntu t3.small EC2 instance.
-  2. Demonstrate live classification on the cloud instance.
-  3. Confirm security architecture: Port 8501 is publicly reachable for evaluation; internal API port 8000 and MLflow port 5000 are closed from external access.
 * **Transition to Arman:** *"Arman will conclude our demonstration with key architectural takeaways and operational limitations."*
 
 ---

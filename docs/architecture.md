@@ -46,7 +46,6 @@ flowchart TD
         Streamlit["Streamlit UI\nfrontend/app.py\n(Port 8501)"]
         Dashboard["frontend/dashboard.py\n(Arman Dashboard Component)"]
         DockerCompose["Docker Compose\n(api + frontend containers)"]
-        EC2["AWS EC2 Deployment\n(Ubuntu t3.small)"]
 
         BestModel --> FastAPI
         Extractor --> FastAPI
@@ -56,7 +55,6 @@ flowchart TD
         Dashboard --> Streamlit
         FastAPI --> DockerCompose
         Streamlit --> DockerCompose
-        DockerCompose --> EC2
     end
 
     subgraph CI_Pipeline["4. Quality Assurance & CI (Charan / Arman / Deeksha)"]
@@ -76,7 +74,7 @@ flowchart TD
 |---|---|---|
 | **Arman (Me)** | **Data & ML Engineer** | `src/features/extractor.py` (single source of truth for 16 URL features), `src/data/prepare.py` (cleaning, deduplication, stratified splits), `src/evaluation/evaluate.py` (`compute_metrics` & evaluation report), `frontend/dashboard.py` (model performance UI), `docs/FEATURE_NOTES.md`, architecture documentation, demo script, and integration testing. |
 | **Charan** | **MLOps & CI Engineer** | `src/training/train.py` (Logistic Regression baseline, Random Forest primary, XGBoost optional), `src/training/model_io.py`, MLflow experiment tracking, model selection & versioning, `src/monitoring/drift.py` (Evidently data drift), `.github/workflows/ci.yml` (automated testing CI). |
-| **Deeksha** | **Backend & Deployment Engineer** | `src/api/main.py` (FastAPI serving: `/`, `/health`, `/predict`, `/model-info`), `src/api/schemas.py`, `frontend/app.py` (main Streamlit detection UI), `Dockerfile`, `docker-compose.yml`, and AWS EC2 deployment. |
+| **Deeksha** | **Backend & Deployment Engineer** | `src/api/main.py` (FastAPI serving: `/`, `/health`, `/predict`, `/model-info`), `src/api/schemas.py`, `frontend/app.py` (main Streamlit detection UI), `Dockerfile`, and `docker-compose.yml`. |
 
 ---
 
