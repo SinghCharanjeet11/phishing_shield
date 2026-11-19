@@ -16,7 +16,7 @@
 * **URL Column Name:** `URL` (string)
 * **Label Column Name:** `ClassLabel` (float/int)
 * **Null Values:**
-  * `ClassLabel`: 1 record with missing label (`https://www.chocolatleroux.com`, row index 65,118) — dropped.
+  * `ClassLabel`: 1 record with missing label (`https://www.chocolatleroux.com`, row index 65,118), dropped.
   * All feature columns: 0 nulls.
 * **Exact Duplicate URLs:** **346 duplicate entries** (648 total duplicate rows)
   * Conflicting labels among duplicates: **0** (no conflicting labels).

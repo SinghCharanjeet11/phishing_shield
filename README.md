@@ -286,6 +286,10 @@ pytest tests/ -v
 | **Streamlit Frontend** | `streamlit run frontend/app.py` | Launches interactive user interface on port 8501. |
 | **Test Suite** | `pytest tests/ -v` | Executes complete automated test suite. |
 
+**MLflow runs** (finished Logistic Regression and Random Forest runs across two training sessions):
+
+![MLflow runs](docs/screenshots/mlflow_runs.png)
+
 ---
 
 ## 9. Docker Deployment
@@ -307,18 +311,28 @@ docker compose down
 ```
 
 * **API Service:** Exposes port `8000`, mounts `./artifacts:/app/artifacts`, with healthcheck on `/health`.
-* **Frontend Service:** Exposes port `8501`, connects to backend via internal Docker network (`API_URL=http://api:8000`).
+* **Frontend Service:** Exposes port `8501`, connects to backend via internal Docker network (`API_URL=http://api:8000`), and mounts `./artifacts` read-only so the dashboard can read `evaluation.json`.
+
+**Home screen:**
+
+![PhishingShield home screen](docs/screenshots/app_home.png)
+
+**Prediction for a phishing URL:**
+
+![Prediction result](docs/screenshots/app_prediction.png)
 
 ---
 
 ## 10. Streamlit Model Performance Dashboard
 
 Implemented in `frontend/dashboard.py` via `render_dashboard(api_url, evaluation_path)`, the dashboard renders directly below the URL analyzer in Streamlit:
-1. **Model Overview:** Displays production model name (`RandomForest`), version (`v1`), MLflow run ID, and evaluation timestamp.
+1. **Model Overview:** Displays production model name (`RandomForest`), version (`v2`), MLflow run ID, and evaluation timestamp.
 2. **Metric Cards:** Real-time visualization of Accuracy (99.95%), Precision (99.94%), Recall (99.98%), F1-Score (99.96%), ROC-AUC (0.9999), and FPR (0.11%).
 3. **Confusion Matrix Breakdown:** Interactive matrix showing exact TN, FP, FN, and TP counts.
 4. **Candidate Model Comparison Table:** Fetches candidate metrics directly from `GET /model-info` to benchmark Logistic Regression vs Random Forest.
 5. **Architectural Safety:** Zero local model inference in UI; graceful fallback messages if API or evaluation reports are missing.
+
+![Model performance dashboard](docs/screenshots/app_dashboard.png)
 
 ---
 
@@ -330,6 +344,8 @@ Drift monitoring (`src/monitoring/drift.py`) detects feature distribution shifts
 * **Shift Characteristics:** Artificially altered to 80% phishing (vs 63% baseline) with a sampling bias towards longer URLs and query-heavy paths.
 * **Output:** `artifacts/reports/drift_report.html` and `artifacts/reports/drift_summary.json`.
 * **Important Notice:** This batch is **simulated** for monitoring demonstration in CI and academic review; it is not live production traffic.
+
+![Evidently drift report](docs/screenshots/drift_report.png)
 
 ---
 
@@ -375,4 +391,4 @@ pytest tests/ -v
 
 ## 15. License
 
-This project is licensed under the MIT License — see the LICENSE file for details.
+This project is licensed under the MIT License. See the LICENSE file for details.
