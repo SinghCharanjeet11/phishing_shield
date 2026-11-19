@@ -20,7 +20,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-import mlflow
+import matplotlib
+
+# Headless backend: MLflow autolog draws plots off the main thread, which
+# crashes the default Tk backend on Windows.
+matplotlib.use("Agg")
+
+import mlflow  # noqa: E402
 import pandas as pd
 from mlflow.tracking import MlflowClient
 from sklearn.ensemble import RandomForestClassifier
