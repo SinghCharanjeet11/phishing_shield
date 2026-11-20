@@ -175,7 +175,7 @@ def build_metadata(
     train_rows: int,
     test_rows: int,
 ) -> dict[str, Any]:
-    """Metadata in the schema agreed in TASKS_CHARAN_MLOPS_CI.md (version is set by save_model)."""
+    """Metadata with the keys in model_io.REQUIRED_METADATA_KEYS (version is set by save_model)."""
     return {
         "model_name": best["model_name"],
         "version": None,
